@@ -1,75 +1,63 @@
-# Análise de Design – Classe GerenciadorEmprestimo
+# Análise de Design - GerenciadorEmprestimo
 
-Este documento apresenta a análise de design da classe `GerenciadorEmprestimo`, fornecida na versão inicial do sistema BiblioTech. A análise considera princípios de Engenharia de Software, com foco em SOLID, coesão, acoplamento e possibilidades de refatoração.
+## Princípios SOLID Violados
 
----
+### 1. SRP (Single Responsibility Principle)
+A classe GerenciadorEmprestimo possui múltiplas responsabilidades:
+- Acesso ao banco de dados
+- Regras de negócio de empréstimo
+- Envio de email
+- Geração de PDF
 
-## Violação dos Princípios SOLID
-
-### SRP – Single Responsibility Principle
-O princípio da responsabilidade única é claramente violado. A classe `GerenciadorEmprestimo` possui múltiplas responsabilidades, tais como:
-- Acesso direto ao banco de dados
-- Lógica de negócio de empréstimos e reservas
-- Envio de e-mails de notificação
-- Geração de arquivos PDF
-- Cálculo e registro de multas
-
-Essa concentração de responsabilidades faz com que a classe tenha várias razões para mudar, indo contra o SRP.
+Isso viola o princípio de responsabilidade única.
 
 ---
 
-### OCP – Open/Closed Principle
-A classe não está aberta para extensão e está fortemente fechada para modificação. Qualquer mudança no mecanismo de notificação (ex: outro tipo de mensagem), persistência ou geração de relatórios exige modificação direta do código da classe principal.
+### 2. OCP (Open/Closed Principle)
+A classe não está aberta para extensão e fechada para modificação.
 
-Não há uso de abstrações que permitam estender funcionalidades sem alterar o código existente.
+Exemplo:
+- Para mudar envio de email ou PDF, é necessário alterar a classe diretamente.
 
 ---
 
-### DIP – Dependency Inversion Principle
-A classe depende diretamente de implementações concretas, como:
-- Biblioteca SQLite (`sqlite3`)
-- Serviço SMTP para envio de e-mails
-- Biblioteca de geração de PDF
+### 3. DIP (Dependency Inversion Principle)
+A classe depende diretamente de implementações concretas:
+- sqlite3
+- smtplib
+- reportlab
 
-Essas dependências diretas dificultam testes, reutilização e manutenção, violando o princípio de inversão de dependência.
+Não utiliza abstrações/interfaces.
 
 ---
 
 ## Problemas de Coesão e Acoplamento
 
 ### Baixa Coesão
-A classe apresenta baixa coesão, pois suas funções não estão relacionadas a uma única finalidade. Ela mistura regras de negócio, persistência de dados, comunicação externa e geração de documentos.
-
-Classes com baixa coesão tendem a ser mais difíceis de entender, testar e evoluir.
-
----
+A classe mistura várias responsabilidades diferentes (persistência, negócio, notificação e relatório).
 
 ### Alto Acoplamento
-O alto acoplamento é evidenciado pelo uso direto de:
-- SQL embutido nos métodos
-- Criação direta de conexões com banco de dados
-- Instanciação direta de serviços externos
+A classe está fortemente acoplada a:
+- Banco de dados SQLite
+- Serviço de email SMTP
+- Biblioteca de geração de PDF
 
-Isso torna a classe fortemente dependente de detalhes de implementação, dificultando mudanças futuras.
+Isso dificulta manutenção e testes.
 
 ---
 
 ## Sugestões de Refatoração
 
-Para melhorar a qualidade do código e alinhar o sistema aos princípios de Engenharia de Software, recomenda-se:
+- Separar responsabilidades em classes específicas:
+  - Repositórios para acesso ao banco
+  - Serviço de notificação para envio de email
+  - Serviço de relatório para geração de PDF
+  - Classe para cálculo de multa
 
-- Separar responsabilidades em classes distintas, aplicando o SRP:
-  - Repositórios para acesso a dados
-  - Serviços para notificação, geração de relatórios e cálculo de multas
-- Introduzir interfaces e abstrações para permitir extensibilidade (OCP)
-- Aplicar injeção de dependências, reduzindo o acoplamento (DIP)
-- Criar uma classe orquestradora responsável apenas por coordenar o fluxo do empréstimo
+- Aplicar injeção de dependência (DIP)
 
-Com essas mudanças, o sistema se torna mais modular, legível, testável e manutenível.
+- Criar interfaces para repositórios
 
----
+- Reduzir acoplamento e aumentar coesão
 
-## Conclusão
-
-A análise evidencia que, apesar de funcional, a versão original da classe `GerenciadorEmprestimo` apresenta problemas significativos de design. A aplicação dos princípios SOLID e conceitos de baixo acoplamento e alta coesão é essencial para melhorar a qualidade do software, justificando a refatoração proposta na próxima etapa da prática.
-
+- Centralizar regras de negócio na classe principal, delegando tarefas
