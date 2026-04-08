@@ -1,124 +1,112 @@
-# Engenharia de Requisitos – Sistema BiblioTech
-
-Este documento apresenta o levantamento e a documentação dos requisitos do sistema **BiblioTech**, um sistema de gestão para bibliotecas comunitárias, conforme descrição fornecida pelo cliente.
-
----
-
 ## Requisitos Funcionais
 
-| ID    | Descrição                                                                 | Prioridade |
-|------|----------------------------------------------------------------------------|------------|
-| RF01 | O sistema deve permitir que o bibliotecário cadastre livros no acervo.     | Alta       |
-| RF02 | O sistema deve permitir informar título, autor, ISBN, categoria e quantidade de exemplares do livro. | Alta |
-| RF03 | O sistema deve permitir o cadastro de leitores com nome, CPF, e-mail e telefone. | Alta |
-| RF04 | O sistema deve permitir registrar empréstimos de livros para leitores cadastrados. | Alta |
-| RF05 | O sistema deve registrar a data do empréstimo automaticamente.             | Média      |
-| RF06 | O sistema deve calcular automaticamente a data prevista de devolução (14 dias após o empréstimo). | Média |
-| RF07 | O sistema deve permitir a devolução de livros emprestados.                 | Alta       |
-| RF08 | O sistema deve permitir a renovação de empréstimos, desde que não existam reservas para o livro. | Média |
-| RF09 | O sistema deve permitir que leitores façam reservas quando não houver exemplares disponíveis. | Média |
-| RF10 | O sistema deve notificar o leitor por e-mail quando um livro reservado estiver disponível. | Baixa |
-
----
+| ID | Descrição | Prioridade |
+|----|-----------|------------|
+| RF01 | O sistema deve permitir cadastrar livros com título, autor, ISBN, categoria e quantidade | Alta |
+| RF02 | O sistema deve permitir atualizar dados dos livros | Média |
+| RF03 | O sistema deve permitir cadastrar leitores com nome, CPF, email e telefone | Alta |
+| RF04 | O sistema deve permitir consultar livros disponíveis | Alta |
+| RF05 | O sistema deve permitir registrar empréstimos de livros | Alta |
+| RF06 | O sistema deve calcular automaticamente a data de devolução | Alta |
+| RF07 | O sistema deve permitir registrar reservas quando não houver exemplares | Alta |
+| RF08 | O sistema deve notificar o leitor por email quando o livro estiver disponível | Média |
+| RF09 | O sistema deve permitir renovação de empréstimos | Média |
+| RF10 | O sistema deve calcular multa por atraso na devolução | Alta |
 
 ## Requisitos Não-Funcionais
 
-| ID    | Categoria     | Descrição                                                                 | Métrica |
-|------|---------------|----------------------------------------------------------------------------|--------|
-| RNF01 | Desempenho    | O sistema deve registrar um empréstimo em até 2 segundos.                  | ≤ 2s   |
-| RNF02 | Segurança     | O sistema deve proteger os dados pessoais dos leitores.                   | CPF e e-mail armazenados com acesso restrito |
-| RNF03 | Disponibilidade | O sistema deve estar disponível durante o horário de funcionamento da biblioteca. | ≥ 99% do horário |
-| RNF04 | Usabilidade   | O sistema deve possuir interface simples e intuitiva para bibliotecários. | Treinamento ≤ 1h |
-| RNF05 | Confiabilidade| O sistema não deve permitir perda de dados em caso de falhas inesperadas. | Backup diário |
-
----
+| ID | Categoria | Descrição | Métrica |
+|----|-----------|-----------|---------|
+| RNF01 | Desempenho | O sistema deve responder consultas em até 2 segundos | Tempo de resposta |
+| RNF02 | Segurança | Os dados dos usuários devem ser protegidos | Criptografia de dados |
+| RNF03 | Usabilidade | Interface deve ser simples e intuitiva | Teste com usuários |
+| RNF04 | Disponibilidade | O sistema deve estar disponível 99% do tempo | SLA |
+| RNF05 | Confiabilidade | O sistema não deve perder dados | Backup diário |
 
 ## Regras de Negócio
 
-| ID   | Descrição |
-|------|-----------|
-| RN01 | O prazo padrão de empréstimo de livros é de 14 dias. |
-| RN02 | O valor da multa por atraso é de R$ 2,00 por dia. |
-| RN03 | Um empréstimo só pode ser renovado se não houver reservas para o livro. |
-| RN04 | Um leitor só pode reservar um livro se não houver exemplares disponíveis. |
-| RN05 | A notificação de reserva é enviada ao primeiro leitor da fila de reservas. |
-
----
+| ID | Descrição |
+|----|-----------|
+| RN01 | O prazo de empréstimo é de 14 dias |
+| RN02 | Multa de R$ 2,00 por dia de atraso |
+| RN03 | Não é possível renovar empréstimos com reservas ativas |
+| RN04 | Reserva só é permitida se não houver exemplares disponíveis |
+| RN05 | O primeiro da fila de reserva tem prioridade |
 
 ## User Stories
 
 ### US01
-Como **bibliotecário**  
-Quero **cadastrar livros no acervo**  
-Para **organizar e controlar os livros disponíveis na biblioteca**
+Como bibliotecário  
+Quero cadastrar livros  
+Para manter o acervo atualizado  
 
-**Critérios de Aceitação:**
-- [ ] O sistema permite informar todos os dados obrigatórios do livro
-- [ ] O sistema impede cadastro sem ISBN
+Critérios de Aceitação:
+- [ ] Deve permitir inserir título, autor, ISBN
+- [ ] Deve salvar no sistema corretamente  
 
-**Story Points:** 3
+Story Points: 3  
 
 ---
 
 ### US02
-Como **bibliotecário**  
-Quero **cadastrar leitores**  
-Para **permitir o controle de empréstimos e reservas**
+Como leitor  
+Quero me cadastrar  
+Para poder pegar livros emprestados  
 
-**Critérios de Aceitação:**
-- [ ] O CPF do leitor deve ser único
-- [ ] O e-mail deve ser válido
+Critérios de Aceitação:
+- [ ] Deve cadastrar CPF único
+- [ ] Deve validar email  
 
-**Story Points:** 2
+Story Points: 2  
 
 ---
 
 ### US03
-Como **bibliotecário**  
-Quero **registrar empréstimos de livros**  
-Para **controlar a retirada de exemplares**
+Como bibliotecário  
+Quero registrar empréstimos  
+Para controlar os livros  
 
-**Critérios de Aceitação:**
-- [ ] O sistema verifica se há exemplares disponíveis
-- [ ] A data de devolução é calculada automaticamente
+Critérios de Aceitação:
+- [ ] Deve verificar disponibilidade
+- [ ] Deve registrar datas automaticamente  
 
-**Story Points:** 3
+Story Points: 5  
 
 ---
 
 ### US04
-Como **leitor**  
-Quero **reservar um livro indisponível**  
-Para **garantir meu atendimento quando ele for devolvido**
+Como leitor  
+Quero reservar livros  
+Para garantir acesso quando disponível  
 
-**Critérios de Aceitação:**
-- [ ] A reserva só é permitida se não houver exemplares
-- [ ] A reserva entra em uma fila ordenada
+Critérios de Aceitação:
+- [ ] Deve entrar em fila
+- [ ] Deve receber notificação  
 
-**Story Points:** 2
+Story Points: 3  
 
 ---
 
 ### US05
-Como **bibliotecário**  
-Quero **registrar a devolução de livros**  
-Para **liberar exemplares para outros leitores**
+Como sistema  
+Quero calcular multas  
+Para penalizar atrasos  
 
-**Critérios de Aceitação:**
-- [ ] O sistema calcula multa automaticamente em caso de atraso
-- [ ] O sistema verifica reservas pendentes
+Critérios de Aceitação:
+- [ ] Deve calcular R$2 por dia
+- [ ] Deve registrar no sistema  
 
-**Story Points:** 3
+Story Points: 4  
 
 ---
 
 ### US06
-Como **leitor**  
-Quero **receber notificações sobre livros reservados**  
-Para **saber quando posso retirar o livro**
+Como bibliotecário  
+Quero renovar empréstimos  
+Para dar mais prazo ao leitor  
 
-**Critérios de Aceitação:**
-- [ ] O sistema envia e-mail na devolução do livro
-- [ ] Apenas o primeiro da fila é notificado
+Critérios de Aceitação:
+- [ ] Não permitir se houver reserva
+- [ ] Atualizar nova data  
 
-**Story Points:** 2
+Story Points: 3  
