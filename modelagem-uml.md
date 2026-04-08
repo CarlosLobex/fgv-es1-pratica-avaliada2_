@@ -69,5 +69,8 @@ classDiagram
     Livro "1" --> "many" Emprestimo
     Livro "1" --> "many" Reserva
     Leitor "1" --> "many" Reserva
+
+<img width="3780" height="2268" alt="image" src="https://github.com/user-attachments/assets/d3a86810-2423-4a52-aa74-b1fd9868d96d" />
+
     Emprestimo "1" --> "0..1" Multa
     Bibliotecario --> Emprestimo
