@@ -74,3 +74,30 @@ classDiagram
 
     Emprestimo "1" --> "0..1" Multa
     Bibliotecario --> Emprestimo
+
+## Diagrama de Sequência – Realizar Empréstimo de Livro
+
+```mermaid
+sequenceDiagram
+    actor Bibliotecario
+    participant Sistema
+    participant Livro
+    participant Leitor
+    participant Emprestimo
+
+    Bibliotecario ->> Sistema: solicitarEmpréstimo(livroISBN, leitorCPF)
+    Sistema ->> Livro: verificarDisponibilidade()
+    Livro -->> Sistema: disponível / indisponível
+
+    Sistema ->> Leitor: verificarCadastro()
+    Leitor -->> Sistema: leitor válido
+
+    alt Livro disponível
+        Sistema ->> Emprestimo: registrarEmpréstimo()
+        Emprestimo -->> Sistema: empréstimo confirmado
+        Sistema -->> Bibliotecario: empréstimo realizado com sucesso
+    else Livro indisponível
+        Sistema ->> Sistema: registrarReserva()
+        Sistema -->> Bibliotecario: reserva criada
+    end
+``
